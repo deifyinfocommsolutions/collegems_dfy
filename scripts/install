@@ -57,7 +57,7 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 #=================================================
 ynh_script_progression --message="Storing installation settings..."
 
-user=webapp${app_nb}
+user=$YNH_APP_INSTANCE_NAME
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
@@ -81,7 +81,7 @@ then
     ynh_script_progression --message="Creating a MySQL database..." --weight=2
 
     db_name=$(ynh_sanitize_dbid --db_name=$app)db
-	db_user=$(ynh_sanitize_dbid --db_name=$app)dbuser
+    db_user=$(ynh_sanitize_dbid --db_name=$app)dbuser
     ynh_app_setting_set --app=$app --key=db_name --value=$db_name
     ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 fi
@@ -147,7 +147,7 @@ fi
 if [ $with_mysql -eq 1 ]; then
     # Store the database access
     echo -e "# MySQL Database
-name: ${db_name}\nuser: ${db_name}\npass: ${db_pwd}" > ../sources/db_access.txt
+name: ${db_name}\nuser: ${db_user}\npass: ${db_pwd}" > ../sources/db_access.txt
 
     # Copy files to the right place
     cp -r "../sources/db_access.txt" "$final_path/db_access.txt"
